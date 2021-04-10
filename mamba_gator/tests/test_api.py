@@ -1,4 +1,3 @@
-import asyncio
 import json
 import random
 import os
@@ -15,10 +14,8 @@ import tempfile
 
 from nb_conda_kernels import CondaKernelSpecManager
 import tornado
-from traitlets.config import Config
 
 from mamba_gator.envmanager import EnvManager
-from mamba_gator.handlers import AVAILABLE_CACHE, PackagesHandler
 from mamba_gator.tests.utils import ServerTest, assert_http_error
 
 
@@ -611,6 +608,16 @@ class TestCondaVersion(JupyterCondaAPITest):
             ["environments",]
         )
         self.assertIsNotNone(EnvManager._conda_version)
+
+
+class TestMambaVersion(JupyterCondaAPITest):
+    def test_mamba(self):
+        EnvManager._mamba_version = None
+        self.assertIsNone(EnvManager._mamba_version)
+        self.conda_api.get(
+            ["environments",]
+        )
+        self.assertIsNotNone(EnvManager._mamba_version)
 
 
 class TestPackagesEnvironmentHandler(JupyterCondaAPITest):
